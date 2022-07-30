@@ -1,0 +1,608 @@
+#include<fstream.h>
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+
+class sargam
+{
+   double mid;
+   int year;
+   char tor, mname[80], aname[40], award[80], mdir[80], genre[20], album[40];
+   float rating;
+
+   public:
+
+   void getd()
+   {
+      cout<<"\nEnter music id: ";
+      cin>>mid;
+      cout<<"Enter music name: ";
+      gets(mname);
+      cout<<"Enter genre: ";
+      gets(genre);
+      cout<<"Enter album: ";
+      gets(album);
+      cout<<"Enter artist name: ";
+      gets(aname);
+      cout<<"Enter director name: ";
+      gets(mdir);
+      cout<<"Enter year of release: ";
+      cin>>year;
+      cout<<"Enter type of release(a/v): ";
+      cin>>tor;
+      cout<<"Enter rating: ";
+      cin>>rating;
+      cout<<"Enter award: ";
+      gets(award);
+   }
+
+   void show()
+   {
+      cout<<"\nMusic id: "<<mid;
+      cout<<"\nMusic name: "<<mname;
+      cout<<"\nGenre: "<<genre;
+      cout<<"\nAlbum: "<<album;
+      cout<<"\nArtist name: "<<aname;
+      cout<<"\nDirector name: "<<mdir;
+      cout<<"\nYear of release: "<<year;
+      cout<<"\nType of release(a/v): "<<tor;
+      cout<<"\nAward: "<<award;
+      cout<<'\n';
+   }
+
+   int retid()
+   {
+      return mid;
+   }
+
+   int retyr()
+   {
+      return year;
+   }
+
+   char* retnm()
+   {
+      return mname;
+   }
+
+   char* retdir()
+   {
+      return mdir;
+   }
+
+   char* retan()
+   {
+      return aname;
+   }
+
+   char* retgen()
+   {
+      return genre;
+   }
+
+   char* retalbum()
+   {
+      return album;
+   }
+
+   char* retawd()
+   {
+      return award;
+   }
+
+   char rettor()
+   {
+      return tor;
+   }
+
+   float retrtg()
+   {
+      return rating;
+   }
+
+};
+
+sargam s1, s2;
+fstream file, temp;
+char ans='y', nm[80], dir[80], gen[20], awd[40], an[80], albm[40], type;
+int ct=0, ch, id, yr;
+float rtg;
+
+void create()
+{
+   file.open("sargam.dat", ios::app| ios::binary);
+   while (ans=='y'|| ans=='Y')
+   {
+      s1.getd();
+      file.write((char*)&s1, sizeof(s1));
+      cout<<"\nDo you want to enter another record?(y/n)";
+      cin>>ans;
+   }
+   file.close();
+}
+
+void readfile()
+{
+   file.open("sargam.dat", ios::in|ios::binary);
+   while(file.read((char*)&s1, sizeof(s1)))
+   {
+       s1.show();
+   }
+   file.close();
+}
+
+void search()
+{
+   int f=0;
+
+   do
+   {
+      file.open("sargam.dat", ios::in|ios::binary);
+      cout<<"\nSearch on the basis of:\n1.Music ID\n2.Music name\n3.Director";
+      cout<<"\n4.Genre\n5.Award\n6.Year of release\n7.Artist name\n";
+      cout<<"8.Rating\n9.Album\n10.Type of release\nEnter choice: ";
+      cin>>ch;
+
+      switch(ch)
+      {
+	 case 1: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.retid()==id)
+			{
+			  s1.show();
+			  f=1;
+			  break;
+			}
+		 }
+		 break;
+
+	 case 2: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retnm(),nm)== 0)
+			  s1.show();
+		 }
+		 break;
+
+	 case 3: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retdir(),dir)== 0)
+			  s1.show();
+		 }
+		 break;
+
+	 case 4: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retgen(), gen)== 0)
+			  s1.show();
+		 }
+		 break;
+
+	 case 5: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retawd(), awd)== 0)
+			  s1.show();
+		 }
+		 break;
+
+	 case 6: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.retyr()==yr)
+			  s1.show();
+		 }
+		 break;
+
+	 case 7: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retan(), an)== 0)
+			  s1.show();
+		 }
+		 break;
+
+	 case 8: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.retrtg()==rtg)
+			  s1.show();
+		 }
+		 break;
+
+	 case 9: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retalbum(), albm)== 0)
+			  s1.show();
+		 }
+		 break;
+
+	 case 10: while(file.read((char*)&s1, sizeof(s1)))
+		  {
+			if(s1.rettor()==type)
+			  s1.show();
+		  }
+		  break;
+
+	 default: cout<<"\nWrong choice";
+      }
+      if(f==0)
+      cout<<"\nNo record found";
+      file.close();
+      cout<<"\nDo you want to search again?(y/n)";
+      cin>>ans;
+   }while(ans=='y'||ans=='Y');
+}
+
+void count()
+{
+   do
+   {
+      file.open("sargam.dat",ios::in|ios::binary);
+
+      cout<<"\nCount on the basis of:\n1.Music ID\n2.Music name\n3.Director";
+      cout<<"\n4.Genre\n5.Award\n6.Year of release\n7.Artist name";
+      cout<<"\n8.Rating\n9.Album\n10.Type of release\nEnter choice: ";
+      cin>>ch;
+
+      switch(ch)
+      {
+	 case 1: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.retid()==id)
+			{
+			  ct++;
+			  break;
+			}
+		 }
+		 break;
+
+	 case 2: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retnm(),nm)== 0)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 3: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retdir(),dir)== 0)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 4: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retgen(),gen)== 0)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 5: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retawd(),awd)== 0)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 6: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.retyr()==yr)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 7: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retan(),an)== 0)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 8: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.retrtg()==rtg)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	 case 9: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmp(s1.retalbum(),albm)== 0)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+
+	case 10: while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s1.rettor()==type)
+			{
+			  ct++;
+			  s1.show();
+			}
+		 }
+		 break;
+      }
+      cout<<"\nNo. of records="<<ct;
+      file.close();
+      cout<<"\nDo you want to count again?(y/n)";
+      cin>>ans;
+   }while(ans=='y'||ans=='Y');
+}
+
+void delrec()
+{
+   int r=1;
+   do
+   {
+      file.open("sargam.dat", ios::in|ios::binary);
+      temp.open("temp.dat",  ios::out|ios::binary);
+
+      cout<<"\nDelete:\n1.first record\n2.last record\n3.nth record";
+      cout<<"\n4.a Music ID\n5.a Music Name\nEnter choice: ";
+      cin>>ch;
+      switch(ch)
+      {
+	 case 1: file.read((char*)&s1, sizeof(s1));
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 case 2: file.seekg(0, ios::end);
+		 int lp=file.tellg();
+		 int s=sizeof(s1);
+		 int lr=lp/s;
+		 file.seekg(0);
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+		       if(r!=lr)
+		       temp.write((char*)&s1, sizeof(s1));
+		       r++;
+		 }
+		 break;
+
+	 case 3: int dr;
+		 cout<<"Enter record no. to delete";
+		 cin>>dr;
+		 file.seekg(0);
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+		       if(r!=dr)
+		       temp.write((char*)&s1, sizeof(s1));
+		       r++;
+		 }
+		 break;
+
+	 case 4: cout<<"\nEnter Music ID to delete: ";
+		 cin>>id;
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(s2.retid()!=id)
+			  temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 case 5: cout<<"Enter music name to delete";
+		 gets(nm);
+		 file.seekg(0);
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+		    if(strcmpi(s1.retnm(),nm)!=0)
+		    temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 default: cout<<"\nWrong choice";
+      }
+      temp.close();
+      file.close();
+      remove("sargam.dat");
+      rename("temp.dat","sargam.dat");
+      cout<<"\nDo you want to delete another record?(y/n)";
+      cin>>ans;
+   }while(ans=='y'||ans=='Y');
+}
+
+void edit()
+{
+   do
+   {
+      file.open("sargam.dat", ios::in|ios::binary);
+      temp.open("temp.dat", ios::out|ios::binary);
+
+      cout<<"\n1.Music ID\n2.Music Name\nEnter choice: ";
+      cin>>ch;
+
+      switch(ch)
+      {
+	 case 1: cout<<"Enter Music ID to edit: ";
+		 cin>>id;
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+		   if(id==s1.retid())
+		   {
+			cout<<"\nEnter new details";
+			s1.getd();
+		   }
+		   temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 case 2: cout<<"\nEnter the song name whose details you wish to edit";
+		 gets(nm);
+
+		 file.seekg(0);
+
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			if(strcmpi(nm, s1.retnm())==0)
+			{
+			   cout<<"\nEnter new details-";
+			   s1.getd();
+			}
+			temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 deault: cout<<"\nWrong choice!";
+      }
+      temp.close();
+      file.close();
+      remove("sargam.dat");
+      rename("temp.dat","sargam.dat");
+
+      cout<<"\nDo you want to edit another record?(y/n)";
+      cin>>ans;
+   }while(ans=='y'||ans=='Y');
+}
+
+
+void insert()
+{
+   int r=0;
+   do
+   {
+      file.open("sargam.dat", ios::in|ios::binary);
+      temp.open("temp.dat", ios::out|ios::binary);
+      cout<<"Insert the record:\n1.at first position\n2.at last position";
+      cout<<"\n3.at nth position\n4.after a music ID\n5.after a music name\n";
+      cout<<"\nEnter choice: ";
+      cin>>ch;
+
+      switch(ch)
+      {
+	 case 1: temp.write((char*)&s2, sizeof(s2));
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+		    temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 case 2: while( file.read((char*)&s1, sizeof(s1)))
+		 {
+			temp.write((char*)&s1, sizeof(s1));
+		 }
+		 temp.write((char*)&s2, sizeof(s2));
+		 break;
+
+	 case 3: int ir;
+		 cout<<"\nEnter record no. after which you want to add a record- ";
+		 cin>>ir;
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+		     r++;
+		     if(r==ir)
+		     {
+			temp.write((char*)&s2, sizeof(s2));
+		     }
+		     temp.write((char*)&s1, sizeof(s1));
+		 }
+		 break;
+
+	 case 4: cout<<"Enter the music ID after which you want to add a record- ";
+		 cin>>id;
+
+		 file.seekg(0);
+		 while( file.read((char*)&s1, sizeof(s1)))
+		 {
+			temp.write((char*)&s1, sizeof(s1));
+			if(s1.retid()==id)
+			temp.write((char*)&s2, sizeof(s2));
+		 }
+		 break;
+
+	 case 5: cout<<"\nEnter the music name after which you want to add a record- ";
+		 gets(nm);
+
+		 file.seekg(0);
+
+		 while(file.read((char*)&s1, sizeof(s1)))
+		 {
+			temp.write((char*)&s1, sizeof(s1));
+			if(strcmpi(s1.retnm(),nm)==0)
+			temp.write((char*)&s2, sizeof(s2));
+		 }
+		 break;
+
+	 default: cout<<"\nWrong choice!";
+      }
+      temp.close();
+      file.close();
+      remove("sargam.dat");
+      rename("temp.dat","sargam.dat");
+
+      cout<<"\nDo you want to insert another record?(y/n)";
+      cin>>ans;
+   }while(ans=='y'||ans=='Y');
+}
+
+void main()
+{
+   clrscr();
+   while(ans=='y' || ans=='Y')
+   {
+      cout<<"\n1.Create file";
+      cout<<"\n2.Read file";
+      cout<<"\n3.Search";
+      cout<<"\n4.Count";
+      cout<<"\n5.Edit";
+      cout<<"\n6.Insert";
+      cout<<"\n7.Delete";
+      cout<<"\nEnter choice: ";
+      cin>>ch;
+
+      switch(ch)
+      {
+	 case 1: create();
+		 break;
+
+	 case 2: readfile();
+		 break;
+
+	 case 3: search();
+		 break;
+
+	 case 4: count();
+		 break;
+
+	 case 5: edit();
+		 break;
+
+	 case 6: cout<<"\nEnter record to be inserted";
+		 s2.getd();
+		 insert();
+		 break;
+
+	 case 7: delrec();
+		 break;
+
+	 default: cout<<"\nWrong choice";
+      }
+      cout<<"\nDo you want to go back to the main menu?(y/n)";
+      cin>>ans;
+   }
+}
+
+/*
+*/
